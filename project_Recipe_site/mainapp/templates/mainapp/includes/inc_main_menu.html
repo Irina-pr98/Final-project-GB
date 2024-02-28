@@ -1,0 +1,17 @@
+<hr>
+<a href="{% url 'mainapp:home' %}" class="btn btn-outline-primary my-2">Главная</a>
+{% if not user.is_authenticated %}
+    <a href="{% url 'authapp:login' %}" class="btn btn-outline-primary my-2">Вход</a>
+{% else %}
+    <a href="{% url 'mainapp:add_recipe' %}" class="btn btn-outline-primary my-2">Добавить рецепт</a>
+    <a href="{% url 'authapp:logout' %}" class="btn btn-outline-primary my-2">Выход</a>
+    <a href="{% url 'authapp:edit' %}" class="btn btn-outline-secondary my-2">
+        {{ user.username|default:'Пользователь' }}
+    </a>
+{% endif %}
+
+{% if user.is_superuser %}
+    <a href="{% url 'admin:index' %}" class="btn btn-outline-secondary my-2">Админ</a>
+{% endif %}
+
+<hr>
