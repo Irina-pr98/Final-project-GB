@@ -12,9 +12,6 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 import os
 from pathlib import Path
-from dotenv import load_dotenv
-
-load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,25 +21,28 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("SECRET_KEY") 
+SECRET_KEY =  os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-if os.environ.get("DEBUG") == "False":
-    DEBUG = False
-else:
-    DEBUG = True
 
+DEBUG = False
 
-SESSION_COOKIE_SECURE = True  
+SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
+
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
-    'irinaefanova.pythonanywhere.com'
+    '192.168.0.104',
+    'irinaefanova.pythonanywhere.com',
 ]
 
 
 # Application definition
+
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -53,9 +53,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'mainapp',
     'authapp',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -91,19 +93,20 @@ WSGI_APPLICATION = 'project_Recipe_site.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {  
-    "default": {  
-        "ENGINE": "django.db.backends.mysql",  
-        "NAME": os.getenv("MYSQL_DBNAME"),  
-        "USER": os.getenv("MYSQL_USER"),  
-        "PASSWORD": os.getenv("MYSQL_PASSWORD"),  
-        "HOST": os.getenv("MYSQL_HOST"),  
-        "OPTIONS": {  
-            "init_command": "SET NAMES 'utf8mb4';SET sql_mode = 'STRICT_TRANS_TABLES'",  
-            "charset": "utf8mb4",  
-        },  
-    }  
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'irinaefanova$default',
+        'USER': 'irinaefanova',
+        'PASSWORD': os.getenv('MYSQL_PASSWORD'),
+        'HOST': 'irinaefanova.mysql.pythonanywhere-services.com',
+        'OPTIONS': {
+            'init_command': "SET NAMES 'utf8mb4';SET sql_mode='STRICT_TRANS_TABLES'",  # режим кодировки и то что мы не хотим терять информацию при сохранении
+            'charset': 'utf8mb4',
+        },
+    }
 }
+
 
 
 
